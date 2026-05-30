@@ -1,0 +1,34 @@
+[
+  {
+    "vehicle_id": "TR-042",
+    "plate": "33 LGS 042",
+    "driver": "Driver A",
+    "route": "Mersin to Istanbul",
+    "status": "in_transit",
+    "fuel_efficiency_l_100km": 28.4
+  },
+  {
+    "vehicle_id": "TR-117",
+    "plate": "33 LGS 117",
+    "driver": "Driver B",
+    "route": "Mersin to Sofia",
+    "status": "in_transit",
+    "fuel_efficiency_l_100km": 31.1
+  },
+  {
+    "vehicle_id": "TR-203",
+    "plate": "33 LGS 203",
+    "driver": "Driver C",
+    "route": "Ankara warehouse",
+    "status": "maintenance",
+    "fuel_efficiency_l_100km": 0
+  },
+  {
+    "vehicle_id": "TR-219",
+    "plate": "33 LGS 219",
+    "driver": "Driver D",
+    "route": "Izmir to Mersin",
+    "status": "loading",
+    "fuel_efficiency_l_100km": 26.9
+  }
+]

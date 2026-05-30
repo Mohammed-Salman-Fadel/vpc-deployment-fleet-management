@@ -1,0 +1,44 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/jammy64"
+  
+    config.vm.define "edge-gateway" do |node|
+      node.vm.hostname = "edge-gateway"
+      node.vm.network "private_network", ip: "192.168.56.10"
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "cmpe433-s6-edge-gateway"
+        vb.memory = 512
+        vb.cpus = 1
+      end
+      node.vm.provision "shell", inline: <<-SHELL
+        set -eu
+        cat >/home/vagrant/demo-resource-profile.txt <<'EOF'
+  VM role: edge GPS gateway
+  CPU limit: 1 vCPU
+  Memory limit: 512 MB
+  Demo purpose: resource isolation proof
+  EOF
+        chown vagrant:vagrant /home/vagrant/demo-resource-profile.txt
+      SHELL
+    end
+  
+    config.vm.define "analytics-node" do |node|
+      node.vm.hostname = "analytics-node"
+      node.vm.network "private_network", ip: "192.168.56.11"
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "cmpe433-s6-analytics-node"
+        vb.memory = 1024
+        vb.cpus = 2
+      end
+      node.vm.provision "shell", inline: <<-SHELL
+        set -eu
+        cat >/home/vagrant/demo-resource-profile.txt <<'EOF'
+  VM role: route analytics worker
+  CPU limit: 2 vCPU
+  Memory limit: 1024 MB
+  Demo purpose: resource isolation proof
+  EOF
+        chown vagrant:vagrant /home/vagrant/demo-resource-profile.txt
+      SHELL
+    end
+  end
+  

@@ -1,0 +1,23 @@
+[
+  {
+    "warehouse_id": "WH-MER-01",
+    "city": "Mersin",
+    "utilization_percent": 81,
+    "open_orders": 128,
+    "sync_status": "synced"
+  },
+  {
+    "warehouse_id": "WH-IST-02",
+    "city": "Istanbul",
+    "utilization_percent": 67,
+    "open_orders": 94,
+    "sync_status": "synced"
+  },
+  {
+    "warehouse_id": "WH-ANK-03",
+    "city": "Ankara",
+    "utilization_percent": 73,
+    "open_orders": 77,
+    "sync_status": "delayed"
+  }
+]

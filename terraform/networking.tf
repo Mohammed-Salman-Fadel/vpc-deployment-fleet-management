@@ -1,3 +1,7 @@
+################################
+#  DEFINING THE VPC DETAILS    #
+################################
+
 # Fetch available availability zones
 data "aws_availability_zones" "available" {
   state = "available"
@@ -16,30 +20,38 @@ resource "aws_vpc" "main" {
 
 # Defining subnets
 resource "aws_subnet" "public" {
+  count = 2
+
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_cidr
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public-subnet"
+    Name = "public-subnet-${count.index + 1}"
     Tier = "public"
 
   }
 }
 
 resource "aws_subnet" "private" {
+  count = 2
+
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.private_subnet_cidr
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  map_public_ip_on_launch = true
+  cidr_block              = var.private_subnet_cidr[count.index]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  map_public_ip_on_launch = false # Private subnet shouldnt have a public ip
 
   tags = {
-    Name = "private-subnet"
+    Name = "private-subnet-${count.index + 1}"
     Tier = "private"
 
   }
 }
+
+################################
+#  CONNECTING THE COMPONENTS   #
+################################
 
 # Internet Gateway
 resource "aws_internet_gateway" "main" {
@@ -64,7 +76,9 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
+  count = 2
+
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
@@ -77,8 +91,10 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
+  count = 2
+
   subnet_id      = aws_subnet.private.id
-  route_table_id = aws_route_table.private.id
+  route_table_id = aws_route_table.private[count.index].id
 }
 
 

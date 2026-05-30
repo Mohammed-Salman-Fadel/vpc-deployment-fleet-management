@@ -1,0 +1,38 @@
+[
+  {
+    "shipment_id": "CMR-2026-001",
+    "customer": "Anatolia Retail",
+    "origin": "Mersin",
+    "destination": "Istanbul",
+    "eta": "2026-05-12 18:00",
+    "status": "on time",
+    "risk": "normal"
+  },
+  {
+    "shipment_id": "CMR-2026-018",
+    "customer": "Balkan Parts",
+    "origin": "Mersin",
+    "destination": "Sofia",
+    "eta": "2026-05-13 09:30",
+    "status": "delayed",
+    "risk": "customs hold"
+  },
+  {
+    "shipment_id": "CMR-2026-024",
+    "customer": "Kaiser Logistics",
+    "origin": "Mersin",
+    "destination": "Munich",
+    "eta": "2026-05-15 16:15",
+    "status": "on time",
+    "risk": "normal"
+  },
+  {
+    "shipment_id": "CMR-2026-031",
+    "customer": "Aegean Chain",
+    "origin": "Izmir",
+    "destination": "Mersin",
+    "eta": "2026-05-11 22:00",
+    "status": "at risk",
+    "risk": "temperature check"
+  }
+]

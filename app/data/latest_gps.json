@@ -1,0 +1,26 @@
+[
+  {
+    "vehicle_id": "TR-042",
+    "timestamp_iso": "2026-05-10T06:44:30Z",
+    "latitude": 37.0442,
+    "longitude": 35.3213,
+    "speed_kph": 72,
+    "shipment_id": "CMR-2026-001"
+  },
+  {
+    "vehicle_id": "TR-117",
+    "timestamp_iso": "2026-05-10T06:44:30Z",
+    "latitude": 40.1885,
+    "longitude": 29.061,
+    "speed_kph": 61,
+    "shipment_id": "CMR-2026-018"
+  },
+  {
+    "vehicle_id": "TR-219",
+    "timestamp_iso": "2026-05-10T06:44:30Z",
+    "latitude": 38.4192,
+    "longitude": 27.1287,
+    "speed_kph": 0,
+    "shipment_id": "CMR-2026-031"
+  }
+]
