@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mersin Logistics Fleet Tracking Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: #eef3ff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 22px;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .info {
+      margin-top: 20px;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .status {
+      font-weight: bold;
+      color: green;
+    }
+
+    .route-box {
+      background: #eef3ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mersin Logistics Fleet Tracking Portal</h1>
+    <p>Customer shipment tracking dashboard connected to AWS Lambda and Amazon S3.</p>
+
+    <div class="cards">
+      <div class="card">
+        <strong>250</strong>
+        Active Trucks
+      </div>
+      <div class="card">
+        <strong>30s</strong>
+        GPS Frequency
+      </div>
+      <div class="card">
+        <strong>2 Years</strong>
+        Data Retention
+      </div>
+      <div class="card">
+        <strong>AWS</strong>
+        Cloud Backend
+      </div>
+    </div>
+
+    <label for="truck">Select Truck:</label><br>
+    <select id="truck">
+      <option value="TR-102">TR-102</option>
+      <option value="TR-145">TR-145</option>
+      <option value="TR-188">TR-188</option>
+    </select>
+
+    <button onclick="loadTruck()">Track Shipment</button>
+
+    <div class="info">
+      <h2 id="truckId">No truck selected</h2>
+
+      <p><b>Shipment ID:</b> <span id="shipment">-</span></p>
+      <p><b>Status:</b> <span id="status" class="status">-</span></p>
+      <p><b>Current Location:</b> <span id="location">-</span></p>
+      <p><b>Destination:</b> <span id="destination">-</span></p>
+      <p><b>ETA:</b> <span id="eta">-</span></p>
+      <p><b>Latitude:</b> <span id="latitude">-</span></p>
+      <p><b>Longitude:</b> <span id="longitude">-</span></p>
+      <p><b>Last GPS Update:</b> <span id="timestamp">-</span></p>
+
+      <div class="route-box">
+        <h3>Route</h3>
+        <p id="route">-</p>
+      </div>
+    </div>
+
+    <h3>Raw API Response</h3>
+    <pre id="raw">Waiting for data...</pre>
+  </div>
+
+  <script>
+    const LAMBDA_URL = "https://5fmml6yskpntwvvtymrltpzjgi0cwbkf.lambda-url.eu-north-1.on.aws/";
+
+<!--    async function loadTruck() {-->
+<!--      const truckId = document.getElementById("truck").value;-->
+<!--      const rawBox = document.getElementById("raw");-->
+<!---->
+<!--      rawBox.innerText = "Loading data from Lambda and S3...";-->
+<!---->
+<!--      try {-->
+<!--        const res = await fetch(`${LAMBDA_URL}?truck_id=${truckId}`, {-->
+<!--          method: "GET"-->
+<!--        });-->
+<!---->
+<!--        const result = await res.json();-->
+<!---->
+<!--        rawBox.innerText = JSON.stringify(result, null, 2);-->
+<!---->
+<!--        if (!result.data) {-->
+<!--          document.getElementById("truckId").innerText = truckId;-->
+<!--          document.getElementById("shipment").innerText = "-";-->
+<!--          document.getElementById("status").innerText = "No GPS data found";-->
+<!--          document.getElementById("location").innerText = "-";-->
+<!--          document.getElementById("destination").innerText = "-";-->
+<!--          document.getElementById("eta").innerText = "-";-->
+<!--          document.getElementById("latitude").innerText = "-";-->
+<!--          document.getElementById("longitude").innerText = "-";-->
+<!--          document.getElementById("timestamp").innerText = "-";-->
+<!--          document.getElementById("route").innerText = "Use the admin panel to generate a GPS event first.";-->
+<!--          return;-->
+<!--        }-->
+<!---->
+<!--        const d = result.data;-->
+<!---->
+<!--        document.getElementById("truckId").innerText = d.truck_id;-->
+<!--        document.getElementById("shipment").innerText = d.shipment_id;-->
+<!--        document.getElementById("status").innerText = d.status;-->
+<!--        document.getElementById("location").innerText = d.current_location;-->
+<!--        document.getElementById("destination").innerText = d.destination;-->
+<!--        document.getElementById("eta").innerText = d.eta;-->
+<!--        document.getElementById("latitude").innerText = d.latitude;-->
+<!--        document.getElementById("longitude").innerText = d.longitude;-->
+<!--        document.getElementById("timestamp").innerText = d.timestamp;-->
+<!--        document.getElementById("route").innerText = d.route;-->
+<!---->
+<!--      } catch (error) {-->
+<!--        rawBox.innerText = "Error: " + error.message;-->
+<!--      }-->
+<!--    }-->
+async function loadTruck() {
+  const truckId = document.getElementById("truck").value;
+  const rawBox = document.getElementById("raw");
+
+  rawBox.innerText = "Loading data from Lambda and S3...";
+
+  try {
+    const res = await fetch(`${LAMBDA_URL}?truck_id=${truckId}`, {
+      method: "GET"
+    });
+
+    let result = await res.json();
+
+    if (typeof result.body === "string") {
+      result = JSON.parse(result.body);
+    }
+
+    rawBox.innerText = JSON.stringify(result, null, 2);
+
+    const d = result.data || result;
+
+    if (!d || !d.truck_id) {
+      document.getElementById("truckId").innerText = truckId;
+      document.getElementById("status").innerText = "No GPS data found";
+      document.getElementById("route").innerText = "Use the admin panel to generate a GPS event first.";
+      return;
+    }
+
+    document.getElementById("truckId").innerText = d.truck_id;
+    document.getElementById("shipment").innerText = d.shipment_id || "-";
+    document.getElementById("status").innerText = d.status || "-";
+    document.getElementById("location").innerText = d.current_location || "-";
+    document.getElementById("destination").innerText = d.destination || "-";
+    document.getElementById("eta").innerText = d.eta || "-";
+    document.getElementById("latitude").innerText = d.latitude || "-";
+    document.getElementById("longitude").innerText = d.longitude || "-";
+    document.getElementById("timestamp").innerText = d.timestamp || "-";
+    document.getElementById("route").innerText = d.route || "-";
+
+  } catch (error) {
+    rawBox.innerText = "Error: " + error.message;
+  }
+}
+
+    loadTruck();
+  </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin GPS Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .warning {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ffeeba;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #1f6feb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #1557b0;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+
+    .link {
+      margin-top: 20px;
+    }
+
+    a {
+      color: #1f6feb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin GPS Simulator</h1>
+
+    <div class="warning">
+      <b>Demo-only admin panel.</b>
+      This page simulates incoming GPS updates from truck devices.
+      In a real system, GPS events would come from driver mobile apps or onboard GPS units.
+    </div>
+
+    <label for="truck">Select Truck:</label><br>
+    <select id="truck">
+      <option value="TR-102">TR-102</option>
+      <option value="TR-145">TR-145</option>
+      <option value="TR-188">TR-188</option>
+    </select>
+
+    <br>
+
+    <button onclick="generateGps()">Generate GPS Event</button>
+
+    <div class="result">
+      <h3>Lambda Response</h3>
+      <pre id="result">No GPS event generated yet.</pre>
+    </div>
+
+    <div class="link">
+      <a href="/">Go to Customer Tracking Portal</a>
+    </div>
+  </div>
+
+  <script>
+    const LAMBDA_URL = "https://5fmml6yskpntwvvtymrltpzjgi0cwbkf.lambda-url.eu-north-1.on.aws/";
+
+    async function generateGps() {
+      const truckId = document.getElementById("truck").value;
+      const resultBox = document.getElementById("result");
+
+      resultBox.innerText = "Sending GPS event to Lambda...";
+
+      try {
+        const res = await fetch(`${LAMBDA_URL}?truck_id=${truckId}`, {
+          method: "POST"
+        });
+
+        const data = await res.json();
+
+        resultBox.innerText = JSON.stringify(data, null, 2);
+
+      } catch (error) {
+        resultBox.innerText = "Error: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
