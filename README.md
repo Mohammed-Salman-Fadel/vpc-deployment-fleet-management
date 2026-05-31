@@ -33,8 +33,8 @@ python app.py
 - Networking
 
   - 2 Public Subnets
+
   - 2 Private Subnets
-  -
 
 - Storage
 - Computing

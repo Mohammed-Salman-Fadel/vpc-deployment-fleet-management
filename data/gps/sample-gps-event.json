@@ -1,0 +1,10 @@
+{
+  "vehicle_id": "TR-042",
+  "timestamp_iso": "2026-05-10T06:44:30Z",
+  "latitude": 37.0442,
+  "longitude": 35.3213,
+  "speed_kph": 72,
+  "shipment_id": "CMR-2026-001",
+  "driver_id": "DRV-1042",
+  "source": "driver-mobile-demo"
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "shipment_id": "CMR-2026-001",
+    "vehicle_id": "TR-042",
+    "customer": "Anatolia Retail",
+    "origin": "Mersin",
+    "destination": "Istanbul",
+    "eta": "2026-05-12T18:00:00+03:00",
+    "status": "on time"
+  },
+  {
+    "shipment_id": "CMR-2026-018",
+    "vehicle_id": "TR-117",
+    "customer": "Balkan Parts",
+    "origin": "Mersin",
+    "destination": "Sofia",
+    "eta": "2026-05-13T09:30:00+03:00",
+    "status": "delayed"
+  }
+]

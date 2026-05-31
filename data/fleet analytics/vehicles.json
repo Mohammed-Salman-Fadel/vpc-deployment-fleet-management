@@ -1,0 +1,20 @@
+[
+  {
+    "vehicle_id": "TR-042",
+    "plate": "33 LGS 042",
+    "route": "Mersin to Istanbul",
+    "status": "in_transit"
+  },
+  {
+    "vehicle_id": "TR-117",
+    "plate": "33 LGS 117",
+    "route": "Mersin to Sofia",
+    "status": "in_transit"
+  },
+  {
+    "vehicle_id": "TR-203",
+    "plate": "33 LGS 203",
+    "route": "Ankara warehouse",
+    "status": "maintenance"
+  }
+]
