@@ -14,7 +14,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   tags = {
-    Name = "vpc"
+    Name = "fleet-vpc"
   }
 }
 
@@ -23,8 +23,8 @@ resource "aws_subnet" "public" {
   count = 2
 
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.public_subnet_cidr
-  availability_zone       = data.aws_availability_zones.available.names[0]
+  cidr_block              = var.public_subnet_cidr[count.index]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
 
   tags = {
@@ -93,8 +93,8 @@ resource "aws_route_table" "private" {
 resource "aws_route_table_association" "private" {
   count = 2
 
-  subnet_id      = aws_subnet.private.id
-  route_table_id = aws_route_table.private[count.index].id
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private.id
 }
 
 

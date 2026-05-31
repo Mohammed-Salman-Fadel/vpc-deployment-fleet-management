@@ -5,19 +5,28 @@ Vagrant.configure("2") do |config|
       node.vm.hostname = "edge-gateway"
       node.vm.network "private_network", ip: "192.168.56.10"
       node.vm.provider "virtualbox" do |vb|
-        vb.name = "cmpe433-s6-edge-gateway"
+        vb.name = "cmpe433 vm - edge-gateway"
         vb.memory = 512
         vb.cpus = 1
       end
-      node.vm.provision "shell", inline: <<-SHELL
+      node.vm.provision "shell", inline: <<~SHELL
         set -eu
         cat >/home/vagrant/demo-resource-profile.txt <<'EOF'
-  VM role: edge GPS gateway
-  CPU limit: 1 vCPU
-  Memory limit: 512 MB
-  Demo purpose: resource isolation proof
-  EOF
+        VM role: edge GPS gateway
+        CPU limit: 1 vCPU
+        Memory limit: 512 MB
+        Demo purpose: resource isolation proof
+        EOF
         chown vagrant:vagrant /home/vagrant/demo-resource-profile.txt
+
+        # Block direct traffic from the analytics VM while preserving SSH via NAT.
+        ufw --force reset
+        ufw default deny incoming
+        ufw default allow outgoing
+        ufw allow in on enp0s3 to any port 22 proto tcp
+        ufw deny in on enp0s8 from 192.168.56.11
+        ufw deny out on enp0s8 to 192.168.56.11
+        ufw --force enable
       SHELL
     end
   
@@ -25,19 +34,28 @@ Vagrant.configure("2") do |config|
       node.vm.hostname = "analytics-node"
       node.vm.network "private_network", ip: "192.168.56.11"
       node.vm.provider "virtualbox" do |vb|
-        vb.name = "cmpe433-s6-analytics-node"
+        vb.name = "cmpe433 vm - analytics-node"
         vb.memory = 1024
         vb.cpus = 2
       end
-      node.vm.provision "shell", inline: <<-SHELL
+      node.vm.provision "shell", inline: <<~SHELL
         set -eu
         cat >/home/vagrant/demo-resource-profile.txt <<'EOF'
-  VM role: route analytics worker
-  CPU limit: 2 vCPU
-  Memory limit: 1024 MB
-  Demo purpose: resource isolation proof
-  EOF
+        VM role: route analytics worker
+        CPU limit: 2 vCPU
+        Memory limit: 1024 MB
+        Demo purpose: resource isolation proof
+        EOF
         chown vagrant:vagrant /home/vagrant/demo-resource-profile.txt
+
+        # Block direct traffic from the edge VM while preserving SSH via NAT.
+        ufw --force reset
+        ufw default deny incoming
+        ufw default allow outgoing
+        ufw allow in on enp0s3 to any port 22 proto tcp
+        ufw deny in on enp0s8 from 192.168.56.10
+        ufw deny out on enp0s8 to 192.168.56.10
+        ufw --force enable
       SHELL
     end
   end
