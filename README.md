@@ -1,26 +1,34 @@
-# vpc-deployment-fleet-management
+# Logistics and Fleet Management AWS Architecture
 
-Set up a working deployment on a real cloud provider. It needs to include all of the following:
+We are a trucking and logistics company based in Mersin, Türkiye. Managing a fleet of 250
+trucks operating across Türkiye and to EU destinations (Bulgaria, Romania, Germany).
 
-- At least one IaaS workload that actually runs something useful (an empty VM does
-  not count)
-- At least one PaaS or Serverless workload
-- AVPCor VNet with a minimum of two subnets– one public, one private
-- Astorage service holding actual data
-- Monitoring and alerting that is turned on and working
-- At least one piece of infrastructure deployed through code (Terraform, CloudFor
-  mation, ARM templates, or Bicep)
+For our business case, we have decided on using AWS to deploy our company's cloud architecture.
 
-Show at least 2 of the following on your own machines:
+1. [Introduction](#logistics-and-fleet-management-aws-architecture)
+2. [IT Requirements](#it-requirements)
+3. [Application](#application)
+4. [Design Decisions](#design-decisions)
 
-- Resource isolation– setting CPU or memory limits on different VMs
-- Snapshot and rollback
-- VMcloning
-- Network isolation between VMs
-- Live migration
-- Aside-by-side comparison of containers and VMs
+## IT Requirements
 
-### Design Decisions
+Must be able to support the following workload and cooperate with proper regulations:
+
+- GPS data from 250 trucks, updated every 30 seconds = around 750 million data points/year.
+- Warehouse management system for 3 Warehouse locations.
+- Stored 2 year GPS tracking data (according to Turkish regulation).
+- Two or more availabiliy zones for disaster recovery.
+
+## Application
+
+Run the following command from the root directory to run the fleet portal application.
+
+```
+cd app
+python app.py
+```
+
+## Design Decisions
 
 - Networking
 
@@ -31,12 +39,3 @@ Show at least 2 of the following on your own machines:
 - Storage
 - Computing
 - Monitoring
-
-### Usage
-
-Run the following command from the root directory to run the fleet portal application.
-
-```
-cd app
-python app.py
-```

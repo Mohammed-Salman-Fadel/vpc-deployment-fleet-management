@@ -93,7 +93,6 @@ def render_dashboard(query):
             ("driver", "Driver"),
             ("route", "Route"),
             ("status", "Status"),
-            ("fuel_efficiency_l_100km", "L/100km"),
         ],
     )
     shipment_rows = render_rows(
